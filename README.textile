@@ -1,4 +1,4 @@
 h2. To Start a Game
 
- * Send an email to chess@email-chess.appspotmail.com.
+ * Send an email to "chess@email-chess.appspotmail.com":mailto:chess@email-chess.appspotmail.com.
  * Add the email of the person you want to play in the CC field. * Wait for their first move!
