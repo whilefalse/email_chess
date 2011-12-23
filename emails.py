@@ -14,7 +14,7 @@ def textify(html):
 def footer(game):
     history_html = 'No moves yet'
     if game.history:
-        histroy_html = '<ul><li> %s </li></ul>' % '</li><li>'.join(game.histroy)
+        history_html = '<ul><li> %s </li></ul>' % '</li><li>'.join(game.history)
 
     return """
 <p>
@@ -28,7 +28,7 @@ Here's the current board:
 </center>
 
 <p>
-You're %s and it's your move...
+You're <strong>%s</strong> and it's your move...
 </p>
 
 <h3>Instructions:</h3>
@@ -43,7 +43,7 @@ You're %s and it's your move...
 <h3>Game History</h3>
 %s
 
-""" % (unicode(game.board).replace("\n", "<br/>").replace(" ", "&nbsp;"), game.whose_go, histroy_html)
+""" % (unicode(game.board).replace("\n", "<br/>").replace(" ", "&nbsp;"), game.whose_go, history_html)
 
 def start_game_email(game):
     message = base_email(game)
