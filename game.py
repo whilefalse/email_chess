@@ -52,11 +52,14 @@ class Game(db.Model):
         match = re.search(r'([a-h][1-8]) ?to ?([a-h][1-8])', move)
 
         if match:
-            self.history.append(move)
-
             matches = match.groups()
             _from = matches[0]
             to = matches[1]
+
+            piece_taken = self.piece_at(to)
+            if piece_taken:
+                move = move + " (takes %s)" % unicode(piece_taken)
+            self.history.append(move)
 
             self.last_board = copy.deepcopy(self.board)
             self.move_from(_from, to)
@@ -64,6 +67,11 @@ class Game(db.Model):
             self.whose_go = Game.next_go[self.whose_go]
         else:
             raise errors.InvalidMove
+
+    def piece_at(self, at):
+        x, y = self.coords_from_alphanumeric(at)
+
+        return self.board[x][y]
 
     def move_from(self, _from, to):
         from_x, from_y = self.coords_from_alphanumeric(_from)
