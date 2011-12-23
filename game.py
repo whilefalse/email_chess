@@ -12,6 +12,7 @@ class Game(db.Model):
     pickled_board = db.BlobProperty()
     pickled_last_board = db.BlobProperty()
     history = db.StringListProperty()
+    processed = db.StringListProperty()
 
     next_go = {'white' : 'black', 'black': 'white'}
 
@@ -56,6 +57,9 @@ class Game(db.Model):
             _from = matches[0]
             to = matches[1]
 
+            piece_moving = self.piece_at(_from)
+            move = "%s %s" % (unicode(piece_moving), move)
+
             piece_taken = self.piece_at(to)
             if piece_taken:
                 move = move + " (takes %s)" % unicode(piece_taken)
@@ -63,7 +67,7 @@ class Game(db.Model):
 
             self.last_board = copy.deepcopy(self.board)
             self.move_from(_from, to)
-            if len(matches) >= 4:
+            if len(matches) >= 4 and matches[2] and matches[3]:
                 self.move_from(matches[2], matches[3])
 
             self.whose_go = Game.next_go[self.whose_go]

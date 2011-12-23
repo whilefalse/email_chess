@@ -15,6 +15,9 @@ class PlayGameHandler(InboundMailHandler):
         game_key = match.groups()[0]
 
         game = Game.get(game_key)
+        # Stop duplicate processing
+        if mail_message.original['Message-ID'] in game.processed:
+            return
 
         payload = mail_message.bodies('text/plain').next()[1]
         if payload.encoding == '8bit' and payload.charset:
@@ -25,6 +28,7 @@ class PlayGameHandler(InboundMailHandler):
         first_line = body.split("\n")[0]
 
         try:
+            game.processed.append(mail_message.original['Message-ID'])
             game.do_move(first_line)
             game.put()
 
