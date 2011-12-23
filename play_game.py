@@ -1,16 +1,12 @@
-import logging, email, re, pickle
-from google.appengine.api import mail
+import logging, re
 from google.appengine.ext.webapp.mail_handlers import InboundMailHandler
 from game import Game
-from board import Board
 import runner
 import emails
 import errors
 
 class PlayGameHandler(InboundMailHandler):
     def receive(self, mail_message):
-        logging.debug(mail_message.to)
-
         match = re.search(r'chess-(.+)@', mail_message.to)
         game_key = match.groups()[0]
 

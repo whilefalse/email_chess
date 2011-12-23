@@ -1,7 +1,5 @@
-import logging, email, pickle
 from google.appengine.ext.webapp.mail_handlers import InboundMailHandler
 from game import Game
-from board import Board
 import runner
 import emails
 
