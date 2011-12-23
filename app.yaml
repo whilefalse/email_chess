@@ -1,0 +1,14 @@
+application: email-chess
+version: 1
+runtime: python
+api_version: 1
+
+inbound_services:
+- mail
+
+handlers:
+- url: /_ah/mail/chess@.*
+  script: start_game.py
+
+- url: /_ah/mail/chess-.+@.*
+  script: play_game.py
