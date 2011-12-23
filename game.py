@@ -49,7 +49,7 @@ class Game(db.Model):
 
             raise errors.Undo
 
-        match = re.search(r'([a-h][1-8]) ?to ?([a-h][1-8])', move)
+        match = re.search(r'([a-h][1-8]) ?to ?([a-h][1-8])(?: ?and ?([a-h][1-8]) ?to ?([a-h][1-8]))?', move)
 
         if match:
             matches = match.groups()
@@ -63,6 +63,8 @@ class Game(db.Model):
 
             self.last_board = copy.deepcopy(self.board)
             self.move_from(_from, to)
+            if len(matches) >= 4:
+                self.move_from(matches[2], matches[3])
 
             self.whose_go = Game.next_go[self.whose_go]
         else:

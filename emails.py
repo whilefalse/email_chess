@@ -14,7 +14,7 @@ def textify(html):
 def footer(game):
     history_html = 'No moves yet'
     if game.history:
-        history_html = '<ul><li> %s </li></ul>' % '</li><li>'.join(game.history)
+        history_html = '<ol><li> %s </li></ol>' % '</li><li>'.join(game.history)
 
     return """
 <p>
@@ -38,6 +38,7 @@ You're <strong>%s</strong> and it's your move...
 <li>A move is the form of "a4 to b5". Be sure to get it in the right format.</li>
 <li>If you think your opponent has made an invalid move, reply with a reason inclduing the work "undo" in the first line. This will undo their move and give control back to them.</li>
 <li>Castling is a special case, you can specify that by saying something like "e1 to g1 and h1 to f1". This will move both pieces in one go for you.</li>
+<li>Known things that don't work - "en passent" pawn taking, pawn promotion</li>
 </ul>
 
 <h3>Game History</h3>
