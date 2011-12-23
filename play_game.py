@@ -27,9 +27,13 @@ class PlayGameHandler(InboundMailHandler):
         try:
             game.do_move(first_line)
             game.put()
+
             emails.play_game_email(game, first_line).send()
         except errors.InvalidMove:
             emails.invalid_move_email(game, first_line).send()
+        except errors.Undo:
+            game.put()
+            emails.undo_move_email(game, first_line).send()
 
 if __name__ == '__main__':
     runner.run(PlayGameHandler)

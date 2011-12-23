@@ -22,7 +22,7 @@ class Board(object):
 
     def __unicode__(self):
         line_length = 33
-        letters = "    %s  " % "   ".join(chr(i) for i in range(ord('A'), ord('I')))
+        letters = "   %s  " % "   ".join(chr(i) for i in range(ord('A'), ord('I')))
         header = "  %s  " % ("=" * line_length)
         middle = ''
         for i, row in enumerate(self.table):

@@ -12,6 +12,10 @@ def textify(html):
     return re.sub(r'<[^>]*?>', '', html).replace('&nbsp;', ' ')
 
 def footer(game):
+    history_html = 'No moves yet'
+    if game.history:
+        histroy_html = '<ul><li> %s </li></ul>' % '</li><li>'.join(game.histroy)
+
     return """
 <p>
 Here's the current board:
@@ -29,14 +33,17 @@ You're %s and it's your move...
 
 <h3>Instructions:</h3>
 
-<p>
-Reply to this email, entering your move in the first line of the response.
-</p>
+<ul>
+<li>Reply to this email, entering your move in the first line of the response.</li>
+<li>A move is the form of "a4 to b5". Be sure to get it in the right format.</li>
+<li>If you think your opponent has made an invalid move, reply with a reason inclduing the work "undo" in the first line. This will undo their move and give control back to them.</li>
+<li>Castling is a special case, you can specify that by saying something like "e1 to g1 and h1 to f1". This will move both pieces in one go for you.</li>
+</ul>
 
-<p>
-A move is the form of "a4 to b5". Be sure to get it in the right format.
-</p>
-""" % (unicode(game.board).replace("\n", "<br/>").replace(" ", "&nbsp;"), game.whose_go)
+<h3>Game History</h3>
+%s
+
+""" % (unicode(game.board).replace("\n", "<br/>").replace(" ", "&nbsp;"), game.whose_go, histroy_html)
 
 def start_game_email(game):
     message = base_email(game)
@@ -83,6 +90,27 @@ Your last move was invalid. Please resend a valid move. Your last move was:
 </font>
 </center>
 """ % (move)
+    message.html += footer(game)
+    message.body = textify(message.html)
+
+    return message
+
+def undo_move_email(game, move):
+    message = base_email(game)
+    message.subject="Your chess game with %s" % game.other_email()
+
+    message.html = """
+<p>
+%s said that your last move was invalid, so it has been undone. They said:
+</p>
+
+<center>
+<font size="5" face="mono" color="red">
+%s
+</font>
+</center>
+
+""" % (textify(game.other_email()), move)
     message.html += footer(game)
     message.body = textify(message.html)
 
